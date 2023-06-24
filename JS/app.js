@@ -11,6 +11,12 @@ if (nombreValido && apellidoValido) {
   console.log("Hola " + nombre + " " + apellido);
 
   let productosCargados = document.getElementById('productos-carrito');
+  let productosDisponibles = [
+    { nombre: "Producto 1", precio: 100 },
+    { nombre: "Producto 2", precio: 200 },
+    { nombre: "Producto 3", precio: 150 },
+    // Agrega más productos según sea necesario
+  ];
   let productosSeleccionados = [];
   let total = 0;
 
@@ -76,6 +82,20 @@ if (nombreValido && apellidoValido) {
       productosSeleccionados.forEach(function(producto, index) {
         console.log('Producto ' + (index + 1) + ': ' + producto.nombre + ' - $' + producto.precio);
       });
+    });
+  });
+
+  // Búsqueda por nombre
+  let botonBusqueda = document.getElementById('btn-buscar');
+  botonBusqueda.addEventListener('click', function() {
+    let terminoBusqueda = document.getElementById('input-busqueda').value;
+    let resultadosBusqueda = productosDisponibles.filter(function(producto) {
+      return producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase());
+    });
+
+    console.log('Resultados de la búsqueda:');
+    resultadosBusqueda.forEach(function(producto) {
+      console.log('Nombre: ' + producto.nombre + ', Precio: $' + producto.precio);
     });
   });
 } else {
