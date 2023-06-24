@@ -11,6 +11,8 @@ if (nombreValido && apellidoValido) {
   console.log("Hola " + nombre + " " + apellido);
 
   let productosCargados = document.getElementById('productos-carrito');
+  let productosSeleccionados = [];
+  let total = 0;
 
   // Ver si el carrito contiene o no algo 
   if (productosCargados.children.length === 0) {
@@ -20,7 +22,6 @@ if (nombreValido && apellidoValido) {
   }
 
   // Calcular el importe total de la compra
-  let total = 0;
   for (let i = 0; i < productosCargados.children.length; i++) {
     let item = productosCargados.children[i];
     console.log('Articulo ' + (i + 1) + ': ' + item.innerText);
@@ -29,17 +30,6 @@ if (nombreValido && apellidoValido) {
     let importeTexto = item.querySelector('.precio').innerText.match(/(\d+)/)[0];
     let importe = parseInt(importeTexto);
     total += importe;
-
-    // Agregar un botón "Eliminar" a cada producto cargado
-    let eliminarButton = document.createElement('button');
-    eliminarButton.innerText = 'Eliminar';
-    eliminarButton.addEventListener('click', function(event) {
-      event.target.parentNode.remove(); 
-      // Recalcular el importe total después de eliminar el producto
-      total -= importe;
-      console.log('Importe total de la compra: $' + total);
-    });
-    item.appendChild(eliminarButton);
   }
 
   // Mostrar el importe total de la compra
@@ -73,6 +63,19 @@ if (nombreValido && apellidoValido) {
       // Actualizar el importe total después de agregar un nuevo producto
       total += parseInt(productPrice);
       console.log('Importe total de la compra: $' + total);
+
+      // Agregar el producto al array de productos seleccionados
+      let producto = {
+        nombre: productName,
+        precio: parseInt(productPrice)
+      };
+      productosSeleccionados.push(producto);
+
+      // Mostrar los productos seleccionados
+      console.log('Productos seleccionados:');
+      productosSeleccionados.forEach(function(producto, index) {
+        console.log('Producto ' + (index + 1) + ': ' + producto.nombre + ' - $' + producto.precio);
+      });
     });
   });
 } else {
