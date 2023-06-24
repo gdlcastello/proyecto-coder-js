@@ -1,48 +1,78 @@
-console.log("Esta conectado");
+console.log("Está conectado");
+alert("Estamos online");
 
-alert("Estamos online")
+let nombre = prompt("Ingrese su nombre:");
+let apellido = prompt("Ingrese su apellido:");
 
+let nombreValido = nombre.length > 3;
+let apellidoValido = apellido.length > 3;
 
+if (nombreValido && apellidoValido) {
+  console.log("Hola " + nombre + " " + apellido); // Mostrar "Hola" seguido del nombre y apellido
 
-let productosCargados = document.getElementById('productos-carrito');
+  let productosCargados = document.getElementById('productos-carrito');
 
-// Ver si el carrito contiene o no algo 
-if (productosCargados.children.length === 0) {
-  console.log('El carrito está vacío');
-} else {
-  console.log('El carrito contiene ' + productosCargados.children.length + ' articulos');
-}
+  // Ver si el carrito contiene o no algo 
+  if (productosCargados.children.length === 0) {
+    console.log('El carrito está vacío');
+  } else {
+    console.log('El carrito contiene ' + productosCargados.children.length + ' artículos');
+  }
 
-// Saber que cantidad hay y mostrarlo 
-for (let i = 0; i < productosCargados.children.length; i++) {
-  let item = productosCargados.children[i];
-  console.log('articulos ' + (i + 1) + ': ' + item.innerText);
+  // Calcular el importe total de la compra
+  let total = 0;
+  for (let i = 0; i < productosCargados.children.length; i++) {
+    let item = productosCargados.children[i];
+    console.log('Articulo ' + (i + 1) + ': ' + item.innerText);
 
+    // Obtener el importe del artículo
+    let importeTexto = item.querySelector('.precio').innerText.match(/(\d+)/)[0];
+    let importe = parseInt(importeTexto);
+    total += importe;
 
-  // Agregar un botón "Eliminar" a cada producto cargado
-  let eliminarButton = document.createElement('button');
-  eliminarButton.innerText = 'Eliminar';
-  eliminarButton.addEventListener('click', function(event) {
-    event.target.parentNode.remove(); 
+    // Agregar un botón "Eliminar" a cada producto cargado
+    let eliminarButton = document.createElement('button');
+    eliminarButton.innerText = 'Eliminar';
+    eliminarButton.addEventListener('click', function(event) {
+      event.target.parentNode.remove(); 
+      // Recalcular el importe total después de eliminar el producto
+      total -= importe;
+      console.log('Importe total de la compra: $' + total);
+    });
+    item.appendChild(eliminarButton);
+  }
+
+  // Mostrar el importe total de la compra
+  console.log('Importe total de la compra: $' + total);
+
+  // Botón agregar al carrito para agregar nuevos productos 
+  let addToCartButtons = document.querySelectorAll('#opciones-productos li button');
+
+  // Función de click para los botones 
+  addToCartButtons.forEach(function(button) {
+    button.addEventListener('click', function(event) {
+      let product = event.target.parentNode;
+      let productName = product.querySelector('h3').innerText;
+      let productPrice = product.querySelector('.precio').innerText.match(/(\d+)/)[0];
+
+      let nuevoProductoCargado = document.createElement('li');
+      nuevoProductoCargado.innerHTML = '<span class="nombre">' + productName + '</span> - <span class="precio">' + productPrice + '</span>';
+
+      // Agregar un botón "Eliminar" al nuevo producto cargado
+      let eliminarButton = document.createElement('button');
+      eliminarButton.innerText = 'Eliminar';
+      eliminarButton.addEventListener('click', function(event) {
+        event.target.parentNode.remove();
+        // Recalcular el importe total después de eliminar el producto
+        total -= parseInt(productPrice);
+        console.log('Importe total de la compra: $' + total);
+      });
+      nuevoProductoCargado.appendChild(eliminarButton);
+
+      productosCargados.appendChild(nuevoProductoCargado);
+      // Actualizar el importe total después de agregar un nuevo producto
+      total += parseInt(productPrice);
+      console.log('Importe total de la compra: $' + total);
+    });
   });
-  item.appendChild(eliminarButton);
 }
-
-
-// Boton agregar al carrito para agregar nuevos productos 
-let addToCartButtons = document.querySelectorAll('#opciones-productos button');
-
-// Funcion de click para los botones 
-addToCartButtons.forEach(function(button) {
-  button.addEventListener('click', function(event) {
-    let product = event.target.parentNode;
-    let productName = product.querySelector('h3').innerText;
-    let productPrice = product.querySelector('p:last-of-type').innerText;
-
-    let nuevoProductoCargado = document.createElement('li');
-    nuevoProductoCargado.innerText = productName + ' - Precio: ' + productPrice;
-    productosCargados.appendChild(nuevoProductoCargado);
-  });
-});
-
-
