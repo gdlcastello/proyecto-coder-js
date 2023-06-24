@@ -4,11 +4,11 @@ alert("Estamos online");
 let nombre = prompt("Ingrese su nombre:");
 let apellido = prompt("Ingrese su apellido:");
 
-let nombreValido = nombre.length > 3;
-let apellidoValido = apellido.length > 3;
+let nombreValido = nombre.length >= 4;
+let apellidoValido = apellido.length >= 4;
 
 if (nombreValido && apellidoValido) {
-  console.log("Hola " + nombre + " " + apellido); // Mostrar "Hola" seguido del nombre y apellido
+  console.log("Hola " + nombre + " " + apellido);
 
   let productosCargados = document.getElementById('productos-carrito');
 
@@ -16,7 +16,7 @@ if (nombreValido && apellidoValido) {
   if (productosCargados.children.length === 0) {
     console.log('El carrito está vacío');
   } else {
-    console.log('El carrito contiene ' + productosCargados.children.length + ' artículos');
+    console.log('Productos en el carrito de compra');
   }
 
   // Calcular el importe total de la compra
@@ -75,4 +75,6 @@ if (nombreValido && apellidoValido) {
       console.log('Importe total de la compra: $' + total);
     });
   });
+} else {
+  alert("Nombre o apellido no son válidos");
 }
