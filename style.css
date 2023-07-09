@@ -30,10 +30,26 @@ body {
   
   #productos-carrito li {
     margin-bottom: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #f9f9f9;
   }
   
   .precio {
     font-weight: bold;
+  }
+
+  /* Estilos para los campos de cantidad en el carrito */
+  #productos-carrito input.cantidad {
+    width: 40px;
+  }
+  
+  /* Estilos para los productos disponibles */
+  #opciones-productos li {
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #f9f9f9;
   }
   
   /* Estilos para los botones */
@@ -53,6 +69,16 @@ body {
     opacity: 0.8;
   }
   
+  #importe-total {
+    display: inline-block;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    color: red;
+  }
+  
+  
+
   /* Estilos para el formulario de búsqueda */
   #input-busqueda {
     margin-right: 10px;
@@ -66,4 +92,3 @@ body {
     padding: 20px;
     text-align: center;
   }
-  

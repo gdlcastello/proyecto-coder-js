@@ -45,19 +45,35 @@ if (productosCargados.children.length === 0) {
   console.log('Productos en el carrito de compra');
 }
 
-// Calcular el importe total de la compra
-for (let i = 0; i < productosCargados.children.length; i++) {
-  let item = productosCargados.children[i];
-  console.log('Articulo ' + (i + 1) + ': ' + item.innerText);
 
-  // Obtener el importe del artículo
-  let importeTexto = item.querySelector('.precio').innerText.match(/(\d+)/)[0];
-  let importe = parseInt(importeTexto);
-  total += importe;
+// Función para actualizar la cantidad de un producto en el carrito
+function actualizarCantidad(event) {
+  let inputCantidad = event.target;
+  let item = inputCantidad.parentNode;
+  let precioElement = item.querySelector('.precio');
+  let precioTexto = precioElement.innerText.match(/(\d+)/)[0];
+  let precio = parseInt(precioTexto);
+  let nuevaCantidad = parseInt(inputCantidad.value);
+  let subtotalElement = item.querySelector('.subtotal');
+  let subtotal = nuevaCantidad * precio;
+
+  subtotalElement.innerText = 'Subtotal: $' + subtotal;
+
+  // Recalcular el importe total después de actualizar la cantidad
+  total = 0;
+  for (let i = 0; i < productosCargados.children.length; i++) {
+    let item = productosCargados.children[i];
+    let subtotalTexto = item.querySelector('.subtotal').innerText.match(/(\d+)/)[0];
+    total += parseInt(subtotalTexto);
+  }
+  console.log('Importe total de la compra: $' + total);
 }
 
-// Mostrar el importe total de la compra
-console.log('Importe total de la compra: $' + total);
+// Agregar el evento de cambio a los campos de cantidad
+let inputsCantidad = document.querySelectorAll('#productos-carrito .cantidad');
+inputsCantidad.forEach(function(input) {
+  input.addEventListener('change', actualizarCantidad);
+});
 
 // Botón agregar al carrito para agregar nuevos productos 
 let addToCartButtons = document.querySelectorAll('#opciones-productos li button');
@@ -70,7 +86,8 @@ addToCartButtons.forEach(function(button) {
     let productPrice = product.querySelector('.precio').innerText.match(/(\d+)/)[0];
 
     let nuevoProductoCargado = document.createElement('li');
-    nuevoProductoCargado.innerHTML = '<span class="nombre">' + productName + '</span> - <span class="precio">' + productPrice + '</span>';
+    nuevoProductoCargado.innerHTML = '<span class="nombre">' + productName + '</span> - <span class="precio">' + productPrice + '</span>' +
+      '<input class="cantidad" type="number" value="1" min="1">';
 
     // Agregar un botón "Eliminar" al nuevo producto cargado
     let eliminarButton = document.createElement('button');
@@ -116,3 +133,37 @@ botonBusqueda.addEventListener('click', function() {
     console.log('Nombre: ' + producto.nombre + ', Precio: $' + producto.precio);
   });
 });
+
+// Función para calcular el importe total de la compra
+function calcularTotal() {
+  total = 0;
+  let itemsCarrito = productosCargados.querySelectorAll('li');
+
+  // Iterar sobre los productos cargados en el carrito
+  itemsCarrito.forEach(function (item) {
+    let importeTexto = item.querySelector('.precio').innerText.match(/(\d+)/)[0];
+    let importe = parseInt(importeTexto);
+    let cantidadElement = item.querySelector('.cantidad');
+
+    if (cantidadElement) {
+      let cantidad = parseInt(cantidadElement.value);
+      let subtotal = importe * cantidad;
+      total += subtotal;
+    } else {
+      total += importe; // Sumar solo el importe del producto
+    }
+  });
+
+  console.log('Importe total de la compra: $' + total);
+
+  // Actualizar el recuadro con el importe total
+  let importeTotalElement = document.getElementById('importe-total');
+  importeTotalElement.textContent = 'Importe Total: $' + total;
+}
+
+
+
+// Agregar evento de clic al botón "Calcular Total"
+let btnCalcularTotal = document.getElementById('btn-calcular-total');
+btnCalcularTotal.addEventListener('click', calcularTotal);
+
