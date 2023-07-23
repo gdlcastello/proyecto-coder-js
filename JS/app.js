@@ -7,25 +7,24 @@ let productosSeleccionados = [];
 let total = 0;
 
 // Función para cargar los productos desde el archivo JSON
-function cargarProductosDesdeJSON() {
-  fetch('json/productos.json') // Ruta relativa al archivo productos.json
-    .then(response => response.json())
-    .then(data => {
-      productosDisponibles = data;
-      console.log('Productos cargados desde JSON:', productosDisponibles);
-      inicializarCarrito();
-    })
-    .catch(error => {
-      console.error('Error al cargar productos desde JSON:', error);
-    });
+async function cargarProductosDesdeJSON() {
+  try {
+    const response = await fetch('json/productos.json'); // Ruta relativa al archivo productos.json
+    const data = await response.json();
+    productosDisponibles = data;
+    console.log('Productos cargados desde JSON:', productosDisponibles);
+    inicializarCarrito();
+  } catch (error) {
+    console.error('Error al cargar productos desde JSON:', error);
+  }
 }
+
 
 // Llama a la función para cargar los productos al iniciar la página
 cargarProductosDesdeJSON();
 
-// Función para inicializar el carrito y agregar los eventos de clic para los botones
+
 function inicializarCarrito() {
-  // Botón agregar al carrito para agregar nuevos productos
   let addToCartButtons = document.querySelectorAll('#opciones-productos li button');
 
   // Función de clic para los botones
