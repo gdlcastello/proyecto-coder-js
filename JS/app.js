@@ -35,88 +35,70 @@ function inicializarCarrito() {
       let productName = product.querySelector('h3').innerText;
       let productPrice = product.querySelector('.precio').innerText.match(/(\d+)/)[0];
 
-      let nuevoProductoCargado = document.createElement('li');
-      nuevoProductoCargado.innerHTML = '<span class="nombre">' + productName + '</span> - <span class="precio">' + productPrice + '</span>' +
-        '<input class="cantidad" type="number" value="1" min="1">';
-
-      // Agregar un botón "Eliminar" al nuevo producto cargado
-      let eliminarButton = document.createElement('button');
-      eliminarButton.innerText = 'Eliminar';
-      eliminarButton.addEventListener('click', function(event) {
-        event.target.parentNode.remove();
-        // Actualizar el importe total después de eliminar el producto
-        let subtotalTexto = nuevoProductoCargado.querySelector('.subtotal').innerText.match(/(\d+)/)[0];
-        total -= parseInt(subtotalTexto);
-        console.log('Importe total de la compra: $' + total);
-        // Eliminar el producto del arreglo productosSeleccionados
-        productosSeleccionados = productosSeleccionados.filter(function(producto) {
-          return producto.nombre !== productName;
-        });
-      });
-      nuevoProductoCargado.appendChild(eliminarButton);
-
-      productosCargados.appendChild(nuevoProductoCargado);
-
-      // Agregar el producto al arreglo productosSeleccionados
       let producto = {
         nombre: productName,
         precio: parseInt(productPrice)
       };
-      productosSeleccionados.push(producto);
-
-      // Actualizar el importe total después de agregar un nuevo producto
-      total += parseInt(productPrice);
-      console.log('Importe total de la compra: $' + total);
-
-      // Mostrar los productos seleccionados
-      console.log('Productos seleccionados:');
-      productosSeleccionados.forEach(function(producto, index) {
-        console.log('Producto ' + (index + 1) + ': ' + producto.nombre + ' - $' + producto.precio);
-      });
-
-      // Agregar el evento de cambio a los campos de cantidad
-      let inputCantidad = nuevoProductoCargado.querySelector('.cantidad');
-      inputCantidad.addEventListener('change', actualizarCantidad);
+      agregarProductoAlCarrito(producto);
     });
   });
+
+  // Agregar evento de clic al botón de búsqueda
+  let btnBuscar = document.getElementById('btn-buscar');
+  btnBuscar.addEventListener('click', buscarProducto);
 }
 
-// Función para actualizar la cantidad de un producto en el carrito
-function actualizarCantidad(event) {
-  let inputCantidad = event.target;
-  let item = inputCantidad.parentNode;
-  let precioElement = item.querySelector('.precio');
-  let precioTexto = precioElement.innerText.match(/(\d+)/)[0];
-  let precio = parseInt(precioTexto);
-  let nuevaCantidad = parseInt(inputCantidad.value);
-  let subtotalElement = item.querySelector('.subtotal');
-  let subtotal = nuevaCantidad * precio;
-
-  subtotalElement.innerText = 'Subtotal: $' + subtotal;
-
-  // Recalcular el importe total después de actualizar la cantidad
+// Función para actualizar el importe total después de eliminar o agregar un producto al carrito
+function actualizarTotal() {
   total = 0;
   let itemsCarrito = productosCargados.querySelectorAll('li');
-  itemsCarrito.forEach(function(item) {
-    let subtotalTexto = item.querySelector('.subtotal').innerText.match(/(\d+)/)[0];
-    total += parseInt(subtotalTexto);
+
+  // Iterar sobre los productos cargados en el carrito
+  itemsCarrito.forEach(function (item) {
+    let importeTexto = item.querySelector('.precio').innerText.match(/(\d+)/)[0];
+    let importe = parseInt(importeTexto);
+    let cantidadElement = item.querySelector('.cantidad');
+
+    if (cantidadElement) {
+      let cantidad = parseInt(cantidadElement.value);
+      let subtotal = importe * cantidad;
+      total += subtotal;
+    } else {
+      total += importe; // Sumar solo el importe del producto
+    }
   });
+
   console.log('Importe total de la compra: $' + total);
+
+  // Actualizar el recuadro con el importe total
+  let importeTotalElement = document.getElementById('importe-total');
+  importeTotalElement.textContent = 'Importe Total: $' + total;
 }
 
-// Búsqueda por nombre
-let botonBusqueda = document.getElementById('btn-buscar');
-botonBusqueda.addEventListener('click', function() {
-  let terminoBusqueda = document.getElementById('input-busqueda').value;
+// Función para buscar productos por nombre
+function buscarProducto() {
+  let terminoBusqueda = document.getElementById('input-busqueda').value.toLowerCase();
   let resultadosBusqueda = productosDisponibles.filter(function(producto) {
-    return producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase());
+    return producto.nombre.toLowerCase().includes(terminoBusqueda);
   });
 
-  console.log('Resultados de la búsqueda:');
+  // Mostrar los resultados en el DOM
+  let resultadosContainer = document.getElementById('resultados-busqueda');
+  resultadosContainer.innerHTML = '';
   resultadosBusqueda.forEach(function(producto) {
-    console.log('Nombre: ' + producto.nombre + ', Precio: $' + producto.precio);
+    let productoEncontrado = document.createElement('div');
+    productoEncontrado.innerHTML = `
+      <h3>${producto.nombre}</h3>
+      <p>Precio: $${producto.precio}</p>
+      <button class="btn-agregar-carrito">Agregar al carrito</button>
+    `;
+    let btnAgregarCarrito = productoEncontrado.querySelector('.btn-agregar-carrito');
+    btnAgregarCarrito.addEventListener('click', function() {
+      agregarProductoAlCarrito(producto);
+    });
+    resultadosContainer.appendChild(productoEncontrado);
   });
-});
+}
 
 // Función para calcular el importe total de la compra
 function calcularTotal() {
@@ -143,6 +125,26 @@ function calcularTotal() {
   // Actualizar el recuadro con el importe total
   let importeTotalElement = document.getElementById('importe-total');
   importeTotalElement.textContent = 'Importe Total: $' + total;
+}
+
+// Función para agregar un producto al carrito
+function agregarProductoAlCarrito(producto) {
+  let nuevoProductoCargado = document.createElement('li');
+  nuevoProductoCargado.innerHTML = `
+    <span class="nombre">${producto.nombre}</span> - <span class="precio">$${producto.precio}</span>
+    <input class="cantidad" type="number" value="1" min="1">
+    <button class="btn-eliminar-producto">Eliminar</button>
+  `;
+
+  // Agregar evento de clic para eliminar el producto del carrito
+  let btnEliminarProducto = nuevoProductoCargado.querySelector('.btn-eliminar-producto');
+  btnEliminarProducto.addEventListener('click', function() {
+    nuevoProductoCargado.remove();
+    actualizarTotal();
+  });
+
+  productosCargados.appendChild(nuevoProductoCargado);
+  actualizarTotal();
 }
 
 // Agregar evento de clic al botón "Calcular Total"
