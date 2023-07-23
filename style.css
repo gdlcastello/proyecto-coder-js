@@ -1,93 +1,113 @@
 /* Estilos generales */
 body {
-    font-family: Arial, sans-serif;
-  }
-  
-  /* Estilos para el encabezado */
-  header {
-    background-color: #f5f5f5;
-    padding: 20px;
-  }
-  
-  h1 {
-    margin: 0;
-  }
-  
-  /* Estilos para las secciones */
-  section {
-    margin-bottom: 30px;
-  }
-  
-  h2 {
-    margin: 0 0 10px;
-  }
-  
-  /* Estilos para la lista de productos en el carrito */
-  #productos-carrito {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  #productos-carrito li {
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    background-color: #f9f9f9;
-  }
-  
-  .precio {
-    font-weight: bold;
-  }
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
 
-  /* Estilos para los campos de cantidad en el carrito */
-  #productos-carrito input.cantidad {
-    width: 40px;
-  }
-  
-  /* Estilos para los productos disponibles */
-  #opciones-productos li {
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    background-color: #f9f9f9;
-  }
-  
-  /* Estilos para los botones */
-  button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    opacity: 0.8;
-  }
-  
-  #importe-total {
-    display: inline-block;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-  }
-  
-  
+/* Estilos para el encabezado */
+header {
+  background-color: #ffa500;
+  padding: 10px;
+  width: 100%;
+  text-align: center;
+}
 
-  /* Estilos para el formulario de búsqueda */
-  #input-busqueda {
-    margin-right: 10px;
-    padding: 8px;
-    width: 200px;
-  }
-  
-  /* Estilos para el pie de página */
-  footer {
-    background-color: #f5f5f5;
-    padding: 20px;
-    text-align: center;
-  }
+h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #fff;
+}
+
+/* Estilos para las secciones */
+section {
+  margin-bottom: 20px;
+  width: 90%;
+  max-width: 800px;
+}
+
+h2 {
+  margin: 0 0 10px;
+}
+
+/* Estilos para la lista de productos en el carrito */
+#productos-carrito {
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+}
+
+#productos-carrito li {
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.precio {
+  font-weight: bold;
+  color: #ffa500;
+}
+
+/* Estilos para los campos de cantidad en el carrito */
+#productos-carrito input.cantidad {
+  width: 40px;
+}
+
+/* Estilos para los productos disponibles */
+#opciones-productos li {
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+/* Estilos para los botones */
+button {
+  background-color: #ffa500;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #ff6600;
+}
+
+#importe-total {
+  display: inline-block;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+}
+
+/* Estilos para el formulario de búsqueda */
+#input-busqueda {
+  padding: 8px;
+  width: 100%;
+  max-width: 300px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Estilos para el pie de página */
+footer {
+  background-color: #ffa500;
+  color: #fff;
+  padding: 10px;
+  width: 100%;
+  text-align: center;
+}
